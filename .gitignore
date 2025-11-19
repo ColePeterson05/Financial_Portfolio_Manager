@@ -3,3 +3,16 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+dotnet-tools.json
+# Ignore Visual Studio cache folder
+.vs/
+
+# Ignore user-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignore Visual Studio auto-generated layout files
+DocumentLayout.json
+DocumentLayout.backup.json
