@@ -1,4 +1,4 @@
-namespace Financial_Portfolio_Management;
+namespace Financial_Portfolio_Manager;
 
 public class ETF
 {

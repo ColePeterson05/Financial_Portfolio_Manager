@@ -1,6 +1,8 @@
-namespace Financial_Portfolio_Management;
+namespace Financial_Portfolio_Manager;
 
 public interface IPortfolioRepository
 {
-    
+    List<Portfolio> GetAll();
+    Portfolio GetById(int portfolioID);
+    void Add(Portfolio portfolio);
 }

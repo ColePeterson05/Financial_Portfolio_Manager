@@ -1,11 +1,9 @@
-﻿using System;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Styling;
 using Avalonia.Media;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Markup.Xaml;
 
 public class Program
 {
@@ -54,7 +52,7 @@ public class MainWindow : Window
         {
             Setters =
             {
-                new Setter(Button.BackgroundProperty, Brushes.DodgerBlue),
+                new Setter(Button.BackgroundProperty, Brushes.DarkRed),
                 new Setter(Button.ForegroundProperty, Brushes.White),
                 new Setter(Button.FontWeightProperty, FontWeight.Bold),
                 new Setter(Button.CornerRadiusProperty, new CornerRadius(8)),
@@ -67,7 +65,7 @@ public class MainWindow : Window
         {
             Setters =
             {
-                new Setter(Button.BackgroundProperty, Brushes.MediumBlue)
+                new Setter(Button.BackgroundProperty, Brushes.Red)
             }
         });
 
@@ -76,7 +74,7 @@ public class MainWindow : Window
         {
             Setters =
             {
-                new Setter(Button.BackgroundProperty, Brushes.DarkBlue)
+                new Setter(Button.BackgroundProperty, Brushes.IndianRed)
             }
         });
 
