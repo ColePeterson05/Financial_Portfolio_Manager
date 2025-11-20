@@ -78,28 +78,22 @@ public class MainWindow : Window
             }
         });
 
-        var button = new Button { Content = "Click Me", HorizontalAlignment = HorizontalAlignment.Center };
         var portButton = new Button { Content = "Portfolio", HorizontalAlignment = HorizontalAlignment.Center };
 
-        _label = new TextBlock { Text = "Hello Avalonia!", HorizontalAlignment = HorizontalAlignment.Center };
-
-        button.Click += (s, e) =>
-        {
-            _clickCount++;
-            _label.Text = $"Button clicked {_clickCount} time{(_clickCount == 1 ? "" : "s")}.";
-        };
+        _label = new TextBlock { Text = "Login", HorizontalAlignment = HorizontalAlignment.Center };
+        _label = new SelectableTextBlock();
+        
 
         portButton.Click += (s, e) =>
         {
-            _clickCount++;
-            _label.Text = $"Portfolio clicked {(_clickCount == 1 ? "" : "s")}.";
+            _label.Text = "Portfolio";
         };
 
         //Where the buttons go
         var stack = new StackPanel
         {
             VerticalAlignment = VerticalAlignment.Center,
-            Children = { _label, button, portButton } //button location
+            Children = { _label, portButton } //button location
         };
 
         Content = stack;
