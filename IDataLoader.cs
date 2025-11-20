@@ -6,5 +6,5 @@ public interface IDataLoader
 
     public List<Stock> LoadStock(string filePath);
 
-    public List<ETF> LoadETF(string filePath);
+    public List<Etf> LoadETF(string filePath);
 }
