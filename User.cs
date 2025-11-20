@@ -1,11 +1,12 @@
-namespace Financial_Portfolio_Management;
+namespace Financial_Portfolio_Manager;
 
 public class User : IUser
 {
-   private string Name { get; set; }
+   public string Name { get; set; }
    private int AccountID { get; set; }
    private bool IsLoggedIn { get; set; }
-   private List<Portfolio> portfolio = new();
+   private List<Portfolio> portfolios = new();
+   private List<Portfolio> _viewPortfolio;
 
    public User(string name)
    {
@@ -16,4 +17,6 @@ public class User : IUser
    {
       return portfolios;
    }
+
+   List<Portfolio> IUser.ViewPortfolio => _viewPortfolio;
 }

@@ -1,9 +1,9 @@
-namespace Financial_Portfolio_Management;
+namespace Financial_Portfolio_Manager;
 
 public abstract class Portfolio
 {
-    private String _Name;
-    private int PortfolioID;
-    private List<Stock>  _Stocks;
-    private Type portfolioType;
+    private String _name;
+    private int _portfolioID;
+    private List<Stock>  _stocks;
+    private Type _portfolioType;
 }
