@@ -1,6 +1,4 @@
-using System.Reflection.Metadata.Ecma335;
-
-namespace Financial_Portfolio_Management;
+namespace Financial_Portfolio_Manager;
 
 // IMPORTANT: Subject to change based on later implementations of stocks & ETFs. Think about:
 // Load stocks and ETFs into Lists of all available stocks and ETFs from TXT files
@@ -35,9 +33,9 @@ public class TxtDataLoader : IDataLoader
     }
 
     // Loads ETF data from a TXT file
-    public List<ETF> LoadETF(string filePath)
+    public List<Etf> LoadETF(string filePath)
     {
-        List<ETF> etfs = new List<ETF>();
+        List<Etf> etfs = new List<Etf>();
 
         string[] lines = File.ReadAllLines(filePath);
 
@@ -51,7 +49,7 @@ public class TxtDataLoader : IDataLoader
             string ticker = parts[0].Trim();
             int price = int.Parse(parts[1].Trim());
 
-            ETF etf = new ETF(ticker, price);
+            Etf etf = new Etf(ticker, price);
             etfs.Add(etf);
         }
 
