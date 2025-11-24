@@ -3,7 +3,7 @@ namespace Financial_Portfolio_Manager;
 public class User : IUser
 {
    public string Name { get; set; }
-   private int AccountID { get; set; }
+   public int AccountId { get; set; } = 0; // default to 0, which means "unassigned" for repo
    private bool IsLoggedIn { get; set; }
    private List<Portfolio> portfolios = new();
    private List<Portfolio> _viewPortfolio;
