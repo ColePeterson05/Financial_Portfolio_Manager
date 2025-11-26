@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="Views/LoginView.axaml" value="Financial_Portfolio_Manager.csproj" />
+        <entry key="Views/UserControl1.axaml" value="Financial_Portfolio_Manager.csproj" />
+      </map>
+    </option>
+  </component>
+</project>
