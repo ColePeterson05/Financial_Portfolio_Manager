@@ -7,6 +7,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 
 public class Program
 {
+    
     // Entry point
     [STAThread]
     public static void Main(string[] args)
