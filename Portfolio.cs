@@ -3,7 +3,7 @@ namespace Financial_Portfolio_Manager;
 public abstract class Portfolio
 {
     public String Name { get; private set; }
-    public int _portfolioID;
+    public int PortfolioId { get; set; } = 0; //default is set to 0
     private List<PortfolioItem> _items;
     public PortfolioType Type { get; private set; }
 
