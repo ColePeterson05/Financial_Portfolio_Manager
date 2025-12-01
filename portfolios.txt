@@ -1,0 +1,10 @@
+Samuel Pham
+AAPL, MSFT, NVDA
+Andres Montoya
+JNJ, PFE, KO
+Cole Peterson
+SPY, VOO, VTI
+Justin Anthony
+JPM, BAC, SPY, AAPL
+Matt Thayer
+QQQ, MSFT

@@ -4,32 +4,27 @@ public class PortfolioService
 {
     private readonly IPortfolioRepository _portfolioRepo;
     private readonly IUserRepository _userRepo;
+    private readonly Dictionary<PortfolioType, PortfolioFactory> _factories;
 
-    public PortfolioService(IPortfolioRepository portfolioRepo, IUserRepository userRepo)
+    public PortfolioService(IPortfolioRepository portfolioRepo, IUserRepository userRepo, Dictionary<PortfolioType, PortfolioFactory> factories)
     {
         _portfolioRepo = portfolioRepo;
         _userRepo = userRepo;
+        _factories = factories;
     }
 
     public Portfolio CreatePortfolio(int userId, string name, PortfolioType type)
     {
         IUser owner = _userRepo.GetUser(userId);
         if (owner == null) throw new Exception("User does not exist");
-
-        // need factory implementation
-        Portfolio portfolio;
         
-        if (type == PortfolioType.Individual)
-        {
-            portfolio = new IndividualPortfolio(name, owner);
-        }
-        else
-        {
-            portfolio = new GroupPortfolio(name, owner);
-        }
+        if (!_factories.ContainsKey(type)) throw new Exception("Portfolio type does not exist");
         
-        _portfolioRepo.Add(portfolio);
-        return portfolio;
+        PortfolioFactory factory = _factories[type];
+        Portfolio newPortfolio = factory.CreatePortfolio(name, owner);
+        
+        _portfolioRepo.Add(newPortfolio);
+        return newPortfolio;
     }
 
     public void DeletePortfolio(int portfolioId, IUser user)

@@ -1,0 +1,8 @@
+AAPL, Apple Inc., 175.50, Technology
+MSFT, Microsoft Corp, 320.10, Technology
+NVDA, NVIDIA Corp, 460.00, Technology
+JNJ, Johnson & Johnson, 155.25, Healthcare
+PFE, Pfizer Inc., 33.40, Healthcare
+JPM, JPMorgan Chase, 145.50, Financial
+BAC, Bank of America, 28.75, Financial
+KO, Coca-Cola Co, 58.90, Consumer Defensive
