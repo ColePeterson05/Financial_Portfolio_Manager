@@ -67,4 +67,13 @@ public class PortfolioRepository : IPortfolioRepository
         _portfolios.Add(portfolio);
         Console.WriteLine($"Portfolio '{portfolio.Name}' added with ID {portfolio.PortfolioId}");
     }
+
+    public void Delete(int id)
+    {
+        Portfolio portfolio = _portfolios.FirstOrDefault(p => p.PortfolioId == id);
+        if (portfolio != null)
+        {
+            _portfolios.Remove(portfolio);
+        }
+    }
 }
