@@ -13,4 +13,16 @@
       <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.8" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="etfs.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="portfolios.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="stocks.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
