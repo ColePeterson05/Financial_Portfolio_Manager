@@ -22,7 +22,7 @@ public class TxtDataLoader : IDataLoader
 
             string ticker = parts[0].Trim();
             string companyName = parts[1].Trim();
-            int price = int.Parse(parts[2].Trim());
+            double price = double.Parse(parts[2].Trim());
             string sector = parts[3].Trim();
 
             Stock stock = new Stock(ticker, companyName, price, sector);
@@ -47,7 +47,7 @@ public class TxtDataLoader : IDataLoader
             string[] parts = line.Split(',');
 
             string ticker = parts[0].Trim();
-            int price = int.Parse(parts[1].Trim());
+            double price = double.Parse(parts[1].Trim());
 
             Etf etf = new Etf(ticker, price);
             etfs.Add(etf);
