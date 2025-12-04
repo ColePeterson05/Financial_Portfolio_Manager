@@ -2,33 +2,28 @@ namespace Financial_Portfolio_Manager;
 
 public class AuthService : IAuthService
 {
-    private User? _currentUser;
+    private User? _loggedIn; // keep user isolated – SRP
 
-    //Logging in the user 
-    public bool Login(string username, string password)
+    public User Login(string accountId, string name)
     {
-        //validating the credientials 
-        if (username == "admin" && password == "password" )
+        // Convert accountId into an int (or you could keep it as string)
+        int id = int.Parse(accountId);
+
+        _loggedIn = new User(name)
         {
-            _currentUser = new User
-            {
-                Name = "Admin",
-                AccountId = 1
-            };
-            return true;
-        }
-        return false;
+            AccountId = id
+        };
+
+        return _loggedIn;
     }
 
-    public void Logout()
-    {
-        _currentUser = null; //returning null for log out
-    }
+    public void Logout() => _loggedIn = null;
 
     public User GetCurrentUser()
     {
-        if (_currentUser == null) //Providing an error if a user is not currently logged in
-            throw new InvalidOperationException("No User is currently logged in.");
-        return _currentUser; //Otherwise it will return current user 
+        if (_loggedIn == null)
+            throw new InvalidOperationException("No user is logged in.");
+
+        return _loggedIn;
     }
 }
