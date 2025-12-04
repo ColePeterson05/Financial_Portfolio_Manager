@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YourApp.Views.PortfolioDetailView">
+
+    <StackPanel>
+        <TextBlock Text="{Binding SelectedPortfolio.Name}" FontSize="20"/>
+
+        <DataGrid Items="{Binding Stocks}"/>
+
+    </StackPanel>
+
+</UserControl>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Financial_Portfolio_Manager.Views.LoginView">
+
+    <StackPanel Width="300" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+        <TextBlock Text="Login" FontSize="24" HorizontalAlignment="Center"/>
+
+        <TextBox Watermark="Enter Account ID"
+                 Text="{Binding EnteredAccountId}"/>
+
+        <Button Content="Login"
+                Command="{Binding LoginCommand}"/>
+    </StackPanel>
+
+</UserControl>

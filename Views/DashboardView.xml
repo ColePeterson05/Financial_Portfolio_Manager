@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YourApp.Views.DashboardView">
+
+    <DockPanel>
+
+        <StackPanel DockPanel.Dock="Top">
+            <TextBlock Text="Portfolio Dashboard" FontSize="20" Margin="10" />
+        </StackPanel>
+
+        <ListBox Items="{Binding Portfolios}" SelectedItem="{Binding SelectedPortfolio}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                        <TextBlock Text="  ("/>
+                        <TextBlock Text="{Binding Type}"/>
+                        <TextBlock Text=")"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+    </DockPanel>
+
+</UserControl>
