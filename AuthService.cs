@@ -2,28 +2,48 @@ namespace Financial_Portfolio_Manager;
 
 public class AuthService : IAuthService
 {
-    private User? _loggedIn; // keep user isolated – SRP
+    private readonly IUserRepository _userRepo;
+    private IUser _currentUser;
 
-    public User Login(string accountId, string name)
+    public AuthService(IUserRepository userRepo)
     {
-        // Convert accountId into an int (or you could keep it as string)
-        int id = int.Parse(accountId);
-
-        _loggedIn = new User(name)
+        //Creating instance of repo 
+        _userRepo = userRepo;
+    }
+    
+    public bool Login(int accountId)
+    {
+        IUser user = _userRepo.GetUser(accountId);
+        if (user == null)
         {
-            AccountId = id
-        };
+            Console.WriteLine("No user is was found with that Id.");
+            _currentUser = null;
+            return false;
+        }
 
-        return _loggedIn;
+        _currentUser = user;
+        Console.WriteLine($"{user.Name} has logged in.");
+        return true;
     }
 
-    public void Logout() => _loggedIn = null;
+    public void Logout()
+    {
+        if (_currentUser == null)
+        {
+            Console.WriteLine("No user is currently logged in.\n");
+            return;
+        }
+
+        Console.WriteLine($"{_currentUser.Name} has logged out.\n");
+        //Returning back to orginal state
+        _currentUser = null;
+    }
 
     public User GetCurrentUser()
     {
-        if (_loggedIn == null)
+        if (_currentUser == null)
             throw new InvalidOperationException("No user is logged in.");
 
-        return _loggedIn;
+        return null;
     }
 }
