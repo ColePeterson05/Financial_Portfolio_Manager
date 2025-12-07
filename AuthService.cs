@@ -30,20 +30,22 @@ public class AuthService : IAuthService
     {
         if (_currentUser == null)
         {
-            Console.WriteLine("No user is currently logged in.\n");
+            Console.WriteLine("No user is currently logged in.");
             return;
         }
 
-        Console.WriteLine($"{_currentUser.Name} has logged out.\n");
+        Console.WriteLine($"{_currentUser.Name} has logged out.");
         //Returning back to orginal state
         _currentUser = null;
     }
 
-    public User GetCurrentUser()
+    public IUser GetCurrentUser()
     {
         if (_currentUser == null)
-            throw new InvalidOperationException("No user is logged in.");
+        {
+            Console.WriteLine("No user is currently logged in.");
+        }
 
-        return null;
+    return _currentUser;
     }
 }
