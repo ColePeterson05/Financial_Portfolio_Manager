@@ -37,6 +37,11 @@ public class PortfolioRepository : IPortfolioRepository
         return _portfolios;
     }
 
+    public List<Portfolio> GetByUser(IUser user)
+    {
+        return _portfolios.Where(p => p.Owner.AccountId == user.AccountId).ToList();
+    }
+
     public Portfolio GetById(int portfolioID)
     {
         return _portfolios.FirstOrDefault(p => p.PortfolioId == portfolioID);

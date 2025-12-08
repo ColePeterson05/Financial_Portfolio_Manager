@@ -6,12 +6,14 @@ public abstract class Portfolio
     public int PortfolioId { get; set; } = 0; //default is set to 0
     private List<PortfolioItem> _items;
     public PortfolioType Type { get; private set; }
+    public IUser Owner { get; private set; }
 
-    public Portfolio(String name, PortfolioType type)
+    public Portfolio(String name, PortfolioType type, IUser owner)
     {
         Name = name;
         _items = new List<PortfolioItem>();
         Type = type;
+        Owner = owner;
     }
 
     public void addItem(PortfolioItem item)
