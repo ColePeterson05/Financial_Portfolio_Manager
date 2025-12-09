@@ -215,10 +215,7 @@ public class Program
     {
         IUser currentUser = authService.GetCurrentUser();
 
-        List<Portfolio> myPortfolios = portfolioRepo
-            .GetAll()
-            .Where(p => p.Owner.AccountId == currentUser.AccountId)
-            .ToList();
+        List<Portfolio> myPortfolios = portfolioRepo.GetByUser(currentUser);
 
         Console.Write("Enter Portfolio ID to add to: ");
         int targetPortId = int.Parse(Console.ReadLine());
@@ -258,6 +255,36 @@ public class Program
         else
         {
             Console.WriteLine("Error: Ticker not found in Stock or ETF catalogs.");
+        }
+    }
+
+    public static void RemoveAsset(IPortfolioRepository portfolioRepo, IAuthService authService)
+    {
+        IUser currentUser = authService.GetCurrentUser();
+        List<Portfolio> myPortfolios = portfolioRepo.GetByUser(currentUser);
+
+        Console.Write("Enter Portfolio ID to remove from: ");
+        int targetPortId = int.Parse(Console.ReadLine());
+        Portfolio targetPortfolio = myPortfolios.FirstOrDefault(p => p.PortfolioId == targetPortId);
+        if (targetPortfolio == null)
+        {
+            Console.WriteLine("Error: You do not own a portfolio with that ID.");
+            return;
+        }
+
+        Console.Write("Enter Ticker to remove: ");
+        string tickerInput = Console.ReadLine()?.Trim();
+        PortfolioItem itemToRemove = targetPortfolio.Items.FirstOrDefault(i =>
+            i.Ticker.Equals(tickerInput, StringComparison.OrdinalIgnoreCase)
+        );
+        if (itemToRemove != null)
+        {
+            targetPortfolio.removeItem(itemToRemove);
+            Console.WriteLine($"Removed {tickerInput} from portfolio.");
+        }
+        else
+        {
+            Console.WriteLine("Error: Ticker not found in your portfolio.");
         }
     }
 
@@ -311,9 +338,8 @@ public class Program
     public static void ViewGroupMembers(IPortfolioRepository portfolioRepo, GroupManager manager)
     {
         List<GroupPortfolio> myGroups = portfolioRepo
-            .GetAll()
+            .GetByUser(manager)
             .OfType<GroupPortfolio>()
-            .Where(g => g.Owner.AccountId == manager.AccountId)
             .ToList();
 
         Console.Write("Enter Portfolio ID to view members: ");
@@ -352,9 +378,8 @@ public class Program
     )
     {
         List<GroupPortfolio> myGroups = portfolioRepo
-            .GetAll()
+            .GetByUser(manager)
             .OfType<GroupPortfolio>()
-            .Where(g => g.Owner.AccountId == manager.AccountId)
             .ToList();
 
         Console.Write("Enter Portfolio ID to add member: ");
@@ -376,23 +401,60 @@ public class Program
         selectedGroup.Members.Add(userToAdd);
     }
 
-    public static void PortfolioScenarios(IPortfolioRepository portfolioRepo, IAuthService authService)
+    public static void RemoveUserFromPortfolio(
+        IUserRepository userRepo,
+        IPortfolioRepository portfolioRepo,
+        GroupManager manager
+    )
+    {
+        List<GroupPortfolio> myGroups = portfolioRepo
+            .GetByUser(manager)
+            .OfType<GroupPortfolio>()
+            .ToList();
+        Console.Write("Enter Portfolio ID to remove member: ");
+        int portId = int.Parse(Console.ReadLine());
+        GroupPortfolio selectedGroup = myGroups.FirstOrDefault(g => g.PortfolioId == portId);
+        if (selectedGroup == null)
+        {
+            Console.WriteLine("Error: You do not manage a group with that ID.");
+            return;
+        }
+        Console.Write($"Enter User ID to remove from {selectedGroup.Name}: ");
+        int userId = int.Parse(Console.ReadLine());
+        IUser userToRemove = userRepo.GetUser(userId);
+        selectedGroup.Members.Remove(userToRemove);
+    }
+
+    public static void PortfolioScenarios(
+        IPortfolioRepository portfolioRepo,
+        IAuthService authService
+    )
     {
         double value;
         IValuationStrategy strategy;
-        
+
         IUser currentUser = authService.GetCurrentUser();
+
+        List<Portfolio> myPortfolios = portfolioRepo.GetByUser(currentUser);
+
         Console.Write("Enter portfolio ID to view scenarios: ");
         int portId = int.Parse(Console.ReadLine());
-        Portfolio portfolio = portfolioRepo.GetById(portId);
+
+        Portfolio selectedPortfolio = myPortfolios.FirstOrDefault(p => p.PortfolioId == portId);
+
+        if (selectedPortfolio == null)
+        {
+            Console.WriteLine("Error: You do not own a portfolio with that ID.");
+            return;
+        }
 
         List<IValuationStrategy> strategies = new List<IValuationStrategy>
         {
             new RealTimeStrategy(),
             new BearMarketStrategy(),
-            new BullMarketStrategy()
+            new BullMarketStrategy(),
         };
-        
+
         Console.WriteLine("Choose a scenario:");
         Console.WriteLine("1. Current valuation");
         Console.WriteLine("2. Bear market valuation");
@@ -419,7 +481,7 @@ public class Program
                 return;
         }
 
-        value = portfolio.CalculateTotalValue(strategy);
+        value = selectedPortfolio.CalculateTotalValue(strategy);
         Console.WriteLine($"{strategy.StrategyName}: {value:C}");
     }
 
@@ -441,8 +503,8 @@ public class Program
             Console.WriteLine("---------------------------------------------------");
             Console.WriteLine("- 1. Create a new user                            -");
             Console.WriteLine("- 2. Create portfolio                             -");
-            Console.WriteLine("- 3. Add asset                                    -");
-            Console.WriteLine("- 4. Add user to portfolio                        -");
+            Console.WriteLine("- 3. Manage asset                                 -");
+            Console.WriteLine("- 4. Manage users in portfolio                    -");
             Console.WriteLine("- 5. View users                                   -");
             Console.WriteLine("- 6. View portfolios                              -");
             Console.WriteLine("- 7. View market scenarios                        -");
@@ -473,13 +535,37 @@ public class Program
                         Console.WriteLine("Invalid option. Please try again.");
                     break;
                 case "3":
-                    AddAsset(portfolioRepo, authService, stockCatalog, etfCatalog);
+                    Console.WriteLine("Select Asset Management: ");
+                    Console.WriteLine("1. Add Asset");
+                    Console.WriteLine("2. Remove Asset");
+                    Console.Write("Enter choice: ");
+                    string assetChoice = Console.ReadLine().Trim();
+                    if (assetChoice == "1")
+                        AddAsset(portfolioRepo, authService, stockCatalog, etfCatalog);
+                    else if (assetChoice == "2")
+                        RemoveAsset(portfolioRepo, authService);
+                    else
+                        Console.WriteLine("Invalid option. Please try again.");
                     break;
                 case "4":
+                    Console.WriteLine("Select User Management: ");
+                    Console.WriteLine("1. Add User to Portfolio");
+                    Console.WriteLine("2. Remove User from Portfolio");
+                    Console.Write("Enter choice: ");
+                    string userChoice = Console.ReadLine().Trim();
+
                     if (!(currentUser is GroupManager))
                         Console.WriteLine("Error: You are not a group manager.");
-                    else
+                    else if ((currentUser is GroupManager) && userChoice == "1")
                         AddUserToPortfolio(userRepo, portfolioRepo, currentUser as GroupManager);
+                    else if ((currentUser is GroupManager) && userChoice == "2")
+                        RemoveUserFromPortfolio(
+                            userRepo,
+                            portfolioRepo,
+                            currentUser as GroupManager
+                        );
+                    else
+                        Console.WriteLine("Invalid option. Please try again.");
                     break;
                 case "5":
                     Console.WriteLine("Select User View: ");
