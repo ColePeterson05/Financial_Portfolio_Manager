@@ -30,4 +30,18 @@ public abstract class Portfolio
     {
         get { return _items; }
     }
+
+    public double CalculateTotalValue(IValuationStrategy strategy)
+    {
+        double total = 0;
+
+        foreach (PortfolioItem item in _items)
+        {
+            Quote snapshot = new Quote(item.Price);
+            
+            total += strategy.GetValuation(snapshot);
+        }
+
+        return total;
+    }
 }
