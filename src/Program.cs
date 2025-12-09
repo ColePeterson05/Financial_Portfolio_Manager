@@ -29,20 +29,14 @@ public class Program
         IPortfolioRepository portfolioRepo = PortfolioRepository.GetInstance();
         IAuthService authService = new AuthService(userRepo);
 
-        // IMPORTANT: CHANGE BACK FOR PRODUCTION
+        Console.Write("Enter path to portfolio data: ");
+        string portfolioPath = Console.ReadLine();
 
-        //Console.Write("Enter path to portfolio data: ");
-        //string portfolioPath = Console.ReadLine();
+        Console.Write("Enter path to stock data: ");
+        string stockPath = Console.ReadLine();
 
-        //Console.Write("Enter path to stock data: ");
-        //string stockPath = Console.ReadLine();
-
-        //Console.Write("Enter path to ETF data: ");
-        //string etfPath = Console.ReadLine();
-
-        string portfolioPath = "portfolios.txt";
-        string stockPath = "stocks.txt";
-        string etfPath = "etfs.txt";
+        Console.Write("Enter path to ETF data: ");
+        string etfPath = Console.ReadLine();
 
         Dictionary<string, Dictionary<int, string>> portfolioData = dataLoader.LoadPortfolio(
             portfolioPath
