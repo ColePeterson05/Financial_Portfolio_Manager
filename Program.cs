@@ -376,6 +376,53 @@ public class Program
         selectedGroup.Members.Add(userToAdd);
     }
 
+    public static void PortfolioScenarios(IPortfolioRepository portfolioRepo, IAuthService authService)
+    {
+        double value;
+        IValuationStrategy strategy;
+        
+        IUser currentUser = authService.GetCurrentUser();
+        Console.Write("Enter portfolio ID to view scenarios: ");
+        int portId = int.Parse(Console.ReadLine());
+        Portfolio portfolio = portfolioRepo.GetById(portId);
+
+        List<IValuationStrategy> strategies = new List<IValuationStrategy>
+        {
+            new RealTimeStrategy(),
+            new BearMarketStrategy(),
+            new BullMarketStrategy()
+        };
+        
+        Console.WriteLine("Choose a scenario:");
+        Console.WriteLine("1. Current valuation");
+        Console.WriteLine("2. Bear market valuation");
+        Console.WriteLine("3. Bull market valuation");
+        Console.Write("Enter choice: ");
+        string choice = Console.ReadLine();
+
+        switch (choice)
+        {
+            case "1":
+                strategy = new RealTimeStrategy();
+                break;
+
+            case "2":
+                strategy = new BearMarketStrategy();
+                break;
+
+            case "3":
+                strategy = new BullMarketStrategy();
+                break;
+
+            default:
+                Console.WriteLine("Invalid option. Please try again.");
+                return;
+        }
+
+        value = portfolio.CalculateTotalValue(strategy);
+        Console.WriteLine($"{strategy.StrategyName}: {value:C}");
+    }
+
     public static void ShowLoginMenu(
         IUserRepository userRepo,
         IPortfolioRepository portfolioRepo,
@@ -398,7 +445,8 @@ public class Program
             Console.WriteLine("- 4. Add user to portfolio                        -");
             Console.WriteLine("- 5. View users                                   -");
             Console.WriteLine("- 6. View portfolios                              -");
-            Console.WriteLine("- 7. Logout                                       -");
+            Console.WriteLine("- 7. View market scenarios                        -");
+            Console.WriteLine("- 8. Logout                                       -");
             Console.WriteLine("---------------------------------------------------");
             Console.WriteLine();
 
@@ -450,6 +498,9 @@ public class Program
                     GetPortfolios(portfolioRepo, authService);
                     break;
                 case "7":
+                    PortfolioScenarios(portfolioRepo, authService);
+                    break;
+                case "8":
                     authService.Logout();
                     running = false;
                     break;
