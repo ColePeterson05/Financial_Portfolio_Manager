@@ -9,19 +9,6 @@ using Financial_Portfolio_Manager;
 
 public class Program
 {
-    //// Entry point
-    //[STAThread]
-    //public static void Main(string[] args)
-    //{
-    //    BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
-    //}
-
-    //// Configure Avalonia
-    //public static AppBuilder BuildAvaloniaApp()
-    //    => AppBuilder.Configure<App>()
-    //        .UsePlatformDetect()
-    //        .LogToTrace();
-
     public static void Main(string[] args)
     {
         IDataLoader dataLoader = new TxtDataLoader();
@@ -29,20 +16,14 @@ public class Program
         IPortfolioRepository portfolioRepo = PortfolioRepository.GetInstance();
         IAuthService authService = new AuthService(userRepo);
 
-        // IMPORTANT: CHANGE BACK FOR PRODUCTION
+        Console.Write("Enter path to portfolio data: ");
+        string portfolioPath = Console.ReadLine()?.Trim() ?? string.Empty;
 
-        //Console.Write("Enter path to portfolio data: ");
-        //string portfolioPath = Console.ReadLine();
+        Console.Write("Enter path to stock data: ");
+        string stockPath = Console.ReadLine()?.Trim() ?? string.Empty;
 
-        //Console.Write("Enter path to stock data: ");
-        //string stockPath = Console.ReadLine();
-
-        //Console.Write("Enter path to ETF data: ");
-        //string etfPath = Console.ReadLine();
-
-        string portfolioPath = "portfolios.txt";
-        string stockPath = "stocks.txt";
-        string etfPath = "etfs.txt";
+        Console.Write("Enter path to ETF data: ");
+        string etfPath = Console.ReadLine()?.Trim() ?? string.Empty;
 
         Dictionary<string, Dictionary<int, string>> portfolioData = dataLoader.LoadPortfolio(
             portfolioPath
@@ -72,7 +53,7 @@ public class Program
             Dictionary<int, string> userTickers = userEntry.Value;
 
             // user loading
-            IUser existing = userRepo.GetUsers().FirstOrDefault(m => m.Name == userName);
+            IUser? existing = userRepo.GetUsers().FirstOrDefault(m => m.Name == userName);
             IUser user = existing ?? new User(userName);
             if (existing == null)
             {
@@ -134,7 +115,7 @@ public class Program
             Console.WriteLine("---------------------------------------------------");
             Console.WriteLine();
             Console.Write("Select an option: ");
-            string choice = Console.ReadLine()?.Trim();
+            string choice = Console.ReadLine()?.Trim() ?? string.Empty;
 
             switch (choice)
             {
@@ -170,13 +151,14 @@ public class Program
     public static void CreateUser(IUserRepository userRepo)
     {
         Console.Write("Input users name: ");
-        string userName = Console.ReadLine();
+        string userName = Console.ReadLine()?.Trim() ?? string.Empty;
+        ;
 
         Console.WriteLine("Select Role");
         Console.WriteLine("1. Standard User");
         Console.WriteLine("2. Group Manager");
         Console.Write("Enter choice: ");
-        string choiceRole = Console.ReadLine().Trim();
+        string choiceRole = Console.ReadLine()?.Trim() ?? string.Empty;
 
         IUser newUser;
 
@@ -202,7 +184,7 @@ public class Program
 
         int userId = currentUser.AccountId;
         Console.Write("Input portfolio name: ");
-        string portfolioName = Console.ReadLine();
+        string portfolioName = Console.ReadLine()?.Trim() ?? string.Empty;
         service.CreatePortfolio(userId, portfolioName, type);
     }
 
@@ -229,7 +211,7 @@ public class Program
         }
 
         Console.Write("Enter Ticker (e.g. AAPL or SPY): ");
-        string tickerInput = Console.ReadLine()?.Trim();
+        string tickerInput = Console.ReadLine()?.Trim() ?? string.Empty;
 
         // check stock catalog
         if (stockCatalog.ContainsKey(tickerInput))
@@ -273,7 +255,7 @@ public class Program
         }
 
         Console.Write("Enter Ticker to remove: ");
-        string tickerInput = Console.ReadLine()?.Trim();
+        string tickerInput = Console.ReadLine()?.Trim() ?? string.Empty;
         PortfolioItem itemToRemove = targetPortfolio.Items.FirstOrDefault(i =>
             i.Ticker.Equals(tickerInput, StringComparison.OrdinalIgnoreCase)
         );
@@ -460,7 +442,7 @@ public class Program
         Console.WriteLine("2. Bear market valuation");
         Console.WriteLine("3. Bull market valuation");
         Console.Write("Enter choice: ");
-        string choice = Console.ReadLine();
+        string choice = Console.ReadLine()?.Trim() ?? string.Empty;
 
         switch (choice)
         {
@@ -513,7 +495,7 @@ public class Program
             Console.WriteLine();
 
             Console.Write("Select an option: ");
-            string choice = Console.ReadLine()?.Trim();
+            string choice = Console.ReadLine()?.Trim() ?? string.Empty;
 
             switch (choice)
             {
@@ -526,7 +508,7 @@ public class Program
                     if (currentUser is GroupManager)
                         Console.WriteLine("2. Group");
                     Console.Write("Enter choice: ");
-                    string portType = Console.ReadLine().Trim();
+                    string portType = Console.ReadLine()?.Trim() ?? string.Empty;
                     if (portType == "1")
                         CreatePortfolio(service, authService, PortfolioType.Individual);
                     else if (portType == "2" && (currentUser is GroupManager))
@@ -539,7 +521,7 @@ public class Program
                     Console.WriteLine("1. Add Asset");
                     Console.WriteLine("2. Remove Asset");
                     Console.Write("Enter choice: ");
-                    string assetChoice = Console.ReadLine().Trim();
+                    string assetChoice = Console.ReadLine()?.Trim() ?? string.Empty;
                     if (assetChoice == "1")
                         AddAsset(portfolioRepo, authService, stockCatalog, etfCatalog);
                     else if (assetChoice == "2")
@@ -552,7 +534,7 @@ public class Program
                     Console.WriteLine("1. Add User to Portfolio");
                     Console.WriteLine("2. Remove User from Portfolio");
                     Console.Write("Enter choice: ");
-                    string userChoice = Console.ReadLine().Trim();
+                    string userChoice = Console.ReadLine()?.Trim() ?? string.Empty;
 
                     if (!(currentUser is GroupManager))
                         Console.WriteLine("Error: You are not a group manager.");
@@ -573,7 +555,7 @@ public class Program
                     if (currentUser is GroupManager)
                         Console.WriteLine("2. Users in Portfolio");
                     Console.Write("Enter choice: ");
-                    string userView = Console.ReadLine().Trim();
+                    string userView = Console.ReadLine()?.Trim() ?? string.Empty;
 
                     if (userView == "1")
                         GetUsers(userRepo);
@@ -597,89 +579,3 @@ public class Program
         }
     }
 }
-
-
-//// Minimal App class
-//public class App : Application
-//{
-//    public override void OnFrameworkInitializationCompleted()
-//    {
-//        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-//        {
-//            desktop.MainWindow = new MainWindow();
-//        }
-
-//        base.OnFrameworkInitializationCompleted();
-//    }
-//}
-
-//// Simple UI in one class
-//public class MainWindow : Window
-//{
-//    private int _clickCount = 0;
-//    private TextBlock _label;
-
-//    public MainWindow()
-//    {
-//        Title = "Avalonia Test Window";
-//        Width = 800;
-//        Height = 400;
-
-//        // Add global button styles programmatically (instead of XAML)
-//        Styles.Add(new Style(x => x.OfType<Button>())
-//        {
-//            Setters =
-//            {
-//                new Setter(Button.BackgroundProperty, Brushes.DarkRed),
-//                new Setter(Button.ForegroundProperty, Brushes.White),
-//                new Setter(Button.FontWeightProperty, FontWeight.Bold),
-//                new Setter(Button.CornerRadiusProperty, new CornerRadius(8)),
-//                new Setter(Button.PaddingProperty, new Thickness(8,6)),
-//            }
-//        });
-
-//        // Optional hover effect
-//        Styles.Add(new Style(x => x.OfType<Button>().Class(":pointerover"))
-//        {
-//            Setters =
-//            {
-//                new Setter(Button.BackgroundProperty, Brushes.Red)
-//            }
-//        });
-
-//        // Optional pressed effect
-//        Styles.Add(new Style(x => x.OfType<Button>().Class(":pressed"))
-//        {
-//            Setters =
-//            {
-//                new Setter(Button.BackgroundProperty, Brushes.IndianRed)
-//            }
-//        });
-
-//        var button = new Button { Content = "Click Me", HorizontalAlignment = HorizontalAlignment.Center };
-//        var portButton = new Button { Content = "Portfolio", HorizontalAlignment = HorizontalAlignment.Center };
-
-//        _label = new TextBlock { Text = "Hello Avalonia!", HorizontalAlignment = HorizontalAlignment.Center };
-
-//        button.Click += (s, e) =>
-//        {
-//            _clickCount++;
-//            _label.Text = $"Button clicked {_clickCount} time{(_clickCount == 1 ? "" : "s")}.";
-//        };
-
-//        portButton.Click += (s, e) =>
-//        {
-//            _clickCount++;
-//            _label.Text = $"Portfolio clicked {(_clickCount == 1 ? "" : "s")}.";
-//        };
-
-//        //Where the buttons go
-//        var stack = new StackPanel
-//        {
-//            VerticalAlignment = VerticalAlignment.Center,
-//            Children = { _label, button, portButton } //button location
-//        };
-
-//        Content = stack;
-//    }
-//}
